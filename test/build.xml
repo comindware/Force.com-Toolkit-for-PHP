@@ -13,7 +13,7 @@
   </target>
 
   <target name="report" depends="prepare">
-    <phpunit2 printsummary="true">
+    <phpunit printsummary="true">
       <batchtest>
         <fileset dir=".">
           <include name="SforcePartnerClientTest.php" />
@@ -21,7 +21,7 @@
       </batchtest>
 
       <formatter type="xml" todir="report" outfile="logfile.xml" />
-    </phpunit2>
-    <phpunit2report infile="report/logfile.xml" format="frames" styledir="${style.dir}" todir="report" />
+    </phpunit>
+    <phpunitreport infile="report/logfile.xml" format="frames" styledir="${style.dir}" todir="report" />
   </target>
 </project>
