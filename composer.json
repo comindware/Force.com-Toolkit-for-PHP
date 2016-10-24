@@ -1,10 +1,17 @@
 {
-    "name": "developerforce/force.com-toolkit-for-php",
+    "name": "comindware/force.com-toolkit-for-php",
     "description": "A wrapper for the Force.com Web Services SOAP API",
     "license": "BSD-3-Clause",
+    "replace": {
+        "developerforce/force.com-toolkit-for-php": "*"
+    },
+    "require": {
+        "php": "^5.5 || ^7.0",
+        "ext-soap": "*"
+    },
     "autoload": {
         "classmap": [
-           "soapclient"
+            "soapclient"
         ]
     },
     "extra": {
