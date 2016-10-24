@@ -38,7 +38,14 @@ require_once ('SforceHeaderOptions.php');
  * @package SalesforceSoapClient
  */
 class SforceBaseClient {
-	protected $sforce;
+    /**
+     * SOAP client.
+     *
+     * @var \SoapClient
+     * @since x.x
+     */
+    protected $sforce;
+
 	protected $sessionId;
 	protected $location;
 	protected $version = '27.0';
@@ -60,9 +67,20 @@ class SforceBaseClient {
 	protected $localeOptions;
 	protected $packageVersionHeader;
 
-  protected function getSoapClient($wsdl, $options) {
-		return new SoapClient($wsdl, $options);
-  }
+    /**
+     * Create and return new SOAP client.
+     *
+     * @param string|null $wsdl
+     * @param array       $options
+     *
+     * @return \SoapClient
+     *
+     * @since x.x
+     */
+    protected function getSoapClient($wsdl, array $options)
+    {
+        return new \SoapClient($wsdl, $options);
+    }
 
 	public function getNamespace() {
 		return $this->namespace;
@@ -838,22 +856,33 @@ class SforceBaseClient {
 	}
 
 
-	/**
-	 * Retrieves one or more objects based on the specified object IDs.
-	 *
-	 * @param string $fieldList      One or more fields separated by commas.
-	 * @param string $sObjectType    Object from which to retrieve data.
-	 * @param array $ids            Array of one or more IDs of the objects to retrieve.
-	 * @return sObject[]
-	 */
-	public function retrieve($fieldList, $sObjectType, $ids) {
-		$this->setHeaders("retrieve");
-		$arg = new stdClass();
-		$arg->fieldList = $fieldList;
-		$arg->sObjectType = new SoapVar($sObjectType, XSD_STRING, 'string', 'http://www.w3.org/2001/XMLSchema');
-		$arg->ids = $ids;
-		return $this->sforce->retrieve($arg)->result;
-	}
+    /**
+     * Retrieves one or more objects based on the specified object IDs.
+     *
+     * @param string $fieldList   One or more fields separated by commas.
+     * @param string $sObjectType Object from which to retrieve data.
+     * @param array $ids          Array of one or more IDs of the objects to retrieve.
+     *
+     * @return sObject[]
+     */
+    public function retrieve($fieldList, $sObjectType, array $ids) {
+        $this->setHeaders('retrieve');
+        $arg = new stdClass();
+        $arg->fieldList = $fieldList;
+        $arg->sObjectType = new SoapVar(
+            $sObjectType,
+            XSD_STRING,
+            'string',
+            'http://www.w3.org/2001/XMLSchema'
+        );
+        $arg->ids = $ids;
+        $result = $this->sforce->retrieve($arg);
+        if (is_object($result) && property_exists($result, 'result')) {
+            return $result->result;
+        }
+
+        return [];
+    }
 
 	/**
 	 * Executes a text search in your organization's data.
